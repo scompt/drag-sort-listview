@@ -651,19 +651,31 @@ public class DragSortListView extends ListView {
                 v = (DragSortItemView) convertView;
                 View oldChild = v.getChildAt(0);
 
+int childCount = v.getChildCount();
                 child = mAdapter.getView(position, oldChild, v);
-                if (child != oldChild) {
+Log.i("mobeta", "v:"+v+", child:"+child+", oldChild:"+oldChild+", oldCount:"+childCount+", newCount:"+v.getChildCount());
+                if (child != oldChild && oldChild != null) {
                     // shouldn't get here if user is reusing convertViews properly
                     v.removeViewAt(0);
                     v.addView(child);
-                }
+                } else if (v.getChildCount() == 0) {
+					v.addView(child);
+				}
             } else {
                 v = new DragSortItemView(getContext());
                 v.setLayoutParams(new AbsListView.LayoutParams(
                         ViewGroup.LayoutParams.FILL_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
                 child = mAdapter.getView(position, null, v);
+try {
+	ViewParent parent2 = child.getParent();
+	ViewParent grandparent = child.getParent() != null ? child.getParent().getParent() : null;
                 v.addView(child);
+Log.i("mobeta", "OK  child:" + child + " parent:" + parent2 + " grand:" + grandparent);
+} catch (IllegalStateException e) {
+	Log.i("mobeta", "ERR child:" + child + " parent:" + child.getParent() + " grand:" + (child.getParent() != null ? child.getParent().getParent() : "null"));
+	throw e;
+}
             }
 
             // Set the correct item height given drag state; passed
@@ -1820,7 +1832,7 @@ public class DragSortListView extends ListView {
         } else {
             child = ((ViewGroup) item).getChildAt(0);
         }
-
+Log.i("mobeta", "getChildHeight("+position+", "+item+", "+invalidChildHeight+") = " + child);
         ViewGroup.LayoutParams lp = child.getLayoutParams();
 
         if (lp != null) {
