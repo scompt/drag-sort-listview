@@ -646,8 +646,8 @@ public class DragSortListView extends ListView {
 
             DragSortItemView v;
             View child;
-            //Log.d("mobeta", "getView: position="+position+" convertView="+convertView);
-            if (convertView != null) {
+            Log.d("mobeta", "getView: position="+position+" convertView="+convertView);
+            if (convertView != null && ((DragSortItemView) convertView).getChildAt(0) != null) {
                 v = (DragSortItemView) convertView;
                 View oldChild = v.getChildAt(0);
 
@@ -1821,6 +1821,7 @@ public class DragSortListView extends ListView {
             child = ((ViewGroup) item).getChildAt(0);
         }
 
+Log.i("mobeta", String.valueOf(item));
         ViewGroup.LayoutParams lp = child.getLayoutParams();
 
         if (lp != null) {
